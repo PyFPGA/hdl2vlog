@@ -1,11 +1,17 @@
 IMAGE=pyfpga/synthesis
+DOCKER="docker run --rm -v $PWD/..:$PWD/.. -w $PWD --user $(id -u):$(id -g) $IMAGE"
 
 mkdir -p results
 
-docker run --rm -v $PWD/..:$PWD/.. -w $PWD $IMAGE yosys -Q -p "
+$DOCKER yosys -Q -p "
 plugin -i systemverilog
 read_systemverilog ../hdl/slog/counter.sv
-write_verilog -noattr results/counter.v
+write_verilog -noattr results/counter_from_sv.v
 "
 
-docker run --rm -v $PWD/..:$PWD/.. -w $PWD $IMAGE rm -fr slpp_all
+$DOCKER yosys -Q -m ghdl -p "
+ghdl ../hdl/vhdl/counter.vhdl -e;
+write_verilog -noattr results/counter_from_vhdl.v
+"
+
+rm -fr slpp_all
