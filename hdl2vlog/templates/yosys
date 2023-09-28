@@ -1,0 +1,8 @@
+docker run --rm -v $PWD:$PWD -w $PWD --user $(id -u):$(id -g) pyfpga/synthesis yosys -Q -m ghdl -p '
+{includes};
+{defines};
+{files};
+{params};
+hierarchy -top {top};
+write_verilog -noattr {output}
+'
