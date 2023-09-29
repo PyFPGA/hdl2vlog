@@ -21,9 +21,9 @@
 """hdl2vlog: VHDL/SV to Verilog converter"""
 
 import argparse
-import errno
-import logging
-import sys
+#import errno
+#import logging
+#import sys
 
 from __version__ import __version__ as version
 
@@ -41,12 +41,12 @@ def get_args(is_vhdl=False):
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version=f'v{version}'
+        version=f'hdl2vlog - v{version}'
     )
 
     parser.add_argument(
         '-o', '--output',
-        metavar='PATH/FILE.v',
+        metavar='PATH',
         default='converted.v',
         help='output file [converted.v]'
     )
@@ -61,7 +61,7 @@ def get_args(is_vhdl=False):
 
         parser.add_argument(
             '--generic',
-            metavar=('NAME', 'VALUE'),
+            metavar=('GENERIC', 'VALUE'),
             action='append',
             nargs=2,
             help=f'specify a top-level Generic {_MULTIPLE}'
@@ -69,7 +69,7 @@ def get_args(is_vhdl=False):
 
         parser.add_argument(
             '--arch',
-            metavar='NAME',
+            metavar='ARCH',
             help='specify a top-level Architecture'
         )
 
@@ -84,7 +84,7 @@ def get_args(is_vhdl=False):
 
         parser.add_argument(
             '--param',
-            metavar=('NAME', 'VALUE'),
+            metavar=('PARAM', 'VALUE'),
             action='append',
             nargs=2,
             help=f'specify a top-level Parameter {_MULTIPLE}'
@@ -92,7 +92,7 @@ def get_args(is_vhdl=False):
 
         parser.add_argument(
             '--define',
-            metavar=('NAME', 'VALUE'),
+            metavar=('DEFINE', 'VALUE'),
             action='append',
             nargs=2,
             help=f'specify a Define {_MULTIPLE}'
@@ -115,12 +115,11 @@ def get_args(is_vhdl=False):
     return parser.parse_args()
 
 
-if __name__ == "__main__":
+def slog2vlog():
+    args = get_args(is_vhdl=False)
+    print(args)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--vhdl', action='store_true')
-    args = parser.parse_args()
-    if args.vhdl:
-        print(get_args(True))
-    else:
-        print(get_args(False))
+
+def vhdl2vlog():
+    args = get_args(is_vhdl=True)
+    print(args)
