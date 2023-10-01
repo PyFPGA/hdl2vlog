@@ -21,11 +21,9 @@
 """hdl2vlog: VHDL/SV to Verilog converter"""
 
 import argparse
-#import errno
-#import logging
-#import sys
 
 from __version__ import __version__ as version
+from pathlib import Path
 
 
 def get_args(is_vhdl=False):
@@ -114,12 +112,34 @@ def get_args(is_vhdl=False):
 
     return parser.parse_args()
 
+def get_template(name):
+    template = Path(__file__).parent / 'templates' / name
+    with template.open('r', encoding='utf-8') as fp:
+        return fp.read().strip()
 
 def slog2vlog():
     args = get_args(is_vhdl=False)
     print(args)
+    cmd = get_template('yosys').format(
+        includes='',
+        defines='',
+        files='FILES',
+        params='',
+        top='TOP',
+        output=args.output
+    )
+    print(cmd)
 
 
 def vhdl2vlog():
     args = get_args(is_vhdl=True)
     print(args)
+    cmd = get_template('yosys').format(
+        includes='',
+        defines='',
+        files='FILES',
+        params='',
+        top='TOP',
+        output=args.output
+    )
+    print(cmd)
