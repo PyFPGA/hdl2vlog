@@ -21,9 +21,18 @@
 """hdl2vlog: VHDL/SV to Verilog converter"""
 
 import argparse
+import logging
+import subprocess
+import time
+
 
 from __version__ import __version__ as version
 from pathlib import Path
+
+
+_log = logging.getLogger(__name__)
+_log.level = logging.INFO
+_log.addHandler(logging.NullHandler())
 
 
 def get_args(is_vhdl=False):
@@ -117,23 +126,34 @@ def get_template(name):
     with template.open('r', encoding='utf-8') as fp:
         return fp.read().strip()
 
+def run(command):
+    start = time.time()
+    # TODO: which docker
+    try:
+        subprocess.run(
+            command, shell=True, check=True, universal_newlines=True,
+        )
+    finally:
+        end = time.time()
+        _log.info('executed in %.3f seconds', end-start)
+
 def slog2vlog():
     args = get_args(is_vhdl=False)
-    print(args)
+    files = []
+    for file in args.files:
+        files.append(file)
     cmd = get_template('yosys').format(
         includes='',
         defines='',
-        files='FILES',
+        files=f'read_systemverilog {" ".join(files)}',
         params='',
-        top='TOP',
+        top=args.top,
         output=args.output
     )
-    print(cmd)
-
+    run(cmd)
 
 def vhdl2vlog():
     args = get_args(is_vhdl=True)
-    print(args)
     cmd = get_template('yosys').format(
         includes='',
         defines='',
