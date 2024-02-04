@@ -154,12 +154,13 @@ def slog2vlog():
 
 def vhdl2vlog():
     args = get_args(is_vhdl=True)
+    file = args.files[0]
     cmd = get_template('yosys').format(
         includes='',
         defines='',
-        files='FILES',
+        files=f'ghdl {file} -e',
         params='',
-        top='TOP',
+        top=args.top,
         output=args.output
     )
-    print(cmd)
+    run(cmd)
