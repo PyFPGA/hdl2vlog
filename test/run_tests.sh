@@ -1,7 +1,9 @@
 set -e
 
 SLOG2VLOG=../hdl2vlog/slog2vlog.py
-FILES=../hdl/slog
+VHDL2VLOG=../hdl2vlog/vhdl2vlog.py
+SFILES=../hdl/slog
 OUTDIR=results
 
-python3 $SLOG2VLOG --top counter --output $OUTDIR/slog.v $FILES/counter.sv
+python3 $SLOG2VLOG --top counter --output $OUTDIR/slog-counter.v $SFILES/counter.sv
+python3 $VHDL2VLOG --top counter --output $OUTDIR/vhdl-counter.v $VFILES/counter.vhdl

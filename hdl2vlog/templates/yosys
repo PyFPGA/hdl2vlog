@@ -1,4 +1,4 @@
-docker run --rm -v $HOME:$HOME -w $PWD --user $(id -u):$(id -g) pyfpga/synthesis yosys -Q -m ghdl -p '
+docker run --rm -v $HOME:$HOME -w $PWD --user $(id -u):$(id -g) ghcr.io/pyfpga/synthesis yosys -Q -m ghdl -p '
 plugin -i systemverilog;
 {includes};
 {defines};
