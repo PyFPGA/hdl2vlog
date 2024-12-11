@@ -1,9 +1,9 @@
 docker run --rm -v $HOME:$HOME -w $PWD --user $(id -u):$(id -g) ghcr.io/pyfpga/synthesis yosys -Q -m ghdl -p '
-plugin -i systemverilog;
-{includes};
-{defines};
-{files};
-{params};
-hierarchy -top {top};
+plugin -i systemverilog
+{includes}
+{defines}
+{files}
+{params}
+hierarchy -top {top}
 write_verilog -noattr {output}
 '
