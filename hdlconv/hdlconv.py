@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-"""hdl2vlog: VHDL/SV to Verilog converter"""
+"""HDLconv: HDL converter"""
 
 import argparse
 import logging
@@ -40,7 +40,7 @@ def get_args(is_vhdl=False):
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version=f'hdl2vlog - v{version}'
+        version=f'HDLconv: - v{version}'
     )
     parser.add_argument(
         '-o', '--output',

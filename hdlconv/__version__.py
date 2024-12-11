@@ -1,3 +1,3 @@
-"""hdl2vlog version"""
+"""hdlconv version"""
 
 __version__ = '0.1.0'

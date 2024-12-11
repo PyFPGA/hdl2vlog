@@ -1,7 +1,7 @@
 set -e
 
-SLOG2VLOG=../hdl2vlog/slog2vlog.py
-VHDL2VLOG=../hdl2vlog/vhdl2vlog.py
+SLOG2VLOG=../hdlconv/slog2vlog.py
+VHDL2VLOG=../hdlconv/vhdl2vlog.py
 SFILES=../hdl/slog
 SFILES=../hdl/vlog
 OUTDIR=results
