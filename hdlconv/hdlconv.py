@@ -18,7 +18,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 
-from __version__ import __version__ as version
+from __init__ import __version__ as version
 from pathlib import Path
 
 
@@ -40,7 +40,7 @@ def get_args(is_vhdl=False):
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version=f'HDLconv: - v{version}'
+        version=f'HDLconv - v{version}'
     )
     parser.add_argument(
         '-o', '--output',
@@ -162,3 +162,6 @@ def vhdl2vlog():
     exit(1)
     create_script('vhdl', data)
     run(cmd)
+
+def vhdl2vhdl():
+    args = get_args(is_vhdl=True)
