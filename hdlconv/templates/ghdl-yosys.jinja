@@ -1,0 +1,22 @@
+#!/bin/bash
+
+{#
+#
+# Copyright (C) 2024 HDLconv Project
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+-#}
+
+{% include 'docker.jinja' %}
+
+$DOCKER /bin/bash -c "
+{%- set flags = '--std=08 -fsynopsys -fexplicit -frelaxed' %}
+{%- for file, lib in files.items() %}
+ghdl -a {{ flags }}{% if lib %} --work={{ lib }}{% endif %} {{ file }}
+{%- endfor %}
+yosys -Q -m ghdl -p '
+ghdl {{ flags }} {% if generics %}{% for key, value in generics.items() %}-g{{ key }}={{ value }} {% endfor %}{% endif %}{{ top }}{% if arch %} {{ arch }}{% endif %}
+write_verilog -noattr {{ output }}
+'
+"

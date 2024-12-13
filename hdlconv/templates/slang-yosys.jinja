@@ -1,0 +1,22 @@
+#!/bin/bash
+
+{#
+#
+# Copyright (C) 2024 HDLconv Project
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+-#}
+
+{% include 'docker.jinja' %}
+
+$DOCKER yosys -Q -m slang -p '
+{% if includes %}verilog_defaults -add{% for path in includes %} -I{{ path }}{% endfor %}{% endif %}
+{% if defines %}verilog_defines{% for key, value in defines.items() %} -D{{ key }}={{ value }}{% endfor %}{% endif %}
+{%- for file in files %}
+read_slang {{ file }}
+{%- endfor %}
+{% if params %}chparam{% for key, value in params.items() %} -set {{ key }} {{ value }}{% endfor %}{% endif %}
+hierarchy -top {{ top }}
+write_verilog -noattr {{ output }}
+'
