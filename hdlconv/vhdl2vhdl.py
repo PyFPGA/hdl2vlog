@@ -1,3 +1,3 @@
-from hdlconv import vhdl2vhdl
+from hdlconv import HDLconv
 
-vhdl2vhdl()
+HDLconv('vhdl', 'vhdl')

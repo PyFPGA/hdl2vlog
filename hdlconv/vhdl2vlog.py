@@ -1,3 +1,3 @@
-from hdlconv import vhdl2vlog
+from hdlconv import HDLconv
 
-vhdl2vlog()
+HDLconv('vhdl', 'vlog')
