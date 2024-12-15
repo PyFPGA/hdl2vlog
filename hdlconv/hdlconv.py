@@ -37,29 +37,25 @@ def get_args(src, dst):
     else:
         metavar = 'FILE'
         help = 'System Verilog file/s'
-    filename = 'converted.vhdl' if dst == 'vhdl' else 'converted.v'
+    output = 'converted.vhdl' if dst == 'vhdl' else 'converted.v'
     parser.add_argument(
         '-v', '--version',
         action='version',
         version=f'HDLconv - v{version}'
     )
     parser.add_argument(
-        '-t', '--top',
-        metavar='NAME',
-        help='specify the top-level of the design'
+        '--debug',
+        action='store_true',
+        help='Enables debug mode'
     )
-    parser.add_argument(
-        '-o', '--output',
-        metavar='PATH',
-        default=filename,
-        help=f'output file [{filename}]'
-    )
-    parser.add_argument(
-        'files',
-        metavar=metavar,
-        nargs='+',
-        help=help
-    )
+    if src == 'vhdl' and dst == 'vlog':
+        parser.add_argument(
+            '--backend',
+            metavar='TOOL',
+            default='ghdl',
+            choices=['ghdl', 'yosys'],
+            help='backend tool [ghdl]'
+        )
     if src == 'vhdl':
         parser.add_argument(
             '--generic',
@@ -94,6 +90,23 @@ def get_args(src, dst):
             action='append',
             help=f'specify an Include Path {MULTIMSG}'
         )
+    parser.add_argument(
+        '-t', '--top',
+        metavar='NAME',
+        help='specify the top-level of the design'
+    )
+    parser.add_argument(
+        '-o', '--output',
+        metavar='PATH',
+        default=output,
+        help=f'output file [{output}]'
+    )
+    parser.add_argument(
+        'files',
+        metavar=metavar,
+        nargs='+',
+        help=help
+    )
     return parser.parse_args()
 
 def get_data(src, dst, args):
@@ -161,9 +174,15 @@ def run_tool(content):
         os.chdir(old_dir)
 
 def HDLconv(src, dst):
-    template = 'ghdl'
     args = get_args(src, dst)
     data = get_data(src, dst, args)
+    if src == 'slog':
+        template = 'slang-yosys'
+    elif src == 'vhdl' and dst == 'vlog':
+        template = args.backend
+    else:
+        template = 'ghdl'
     content = get_file(template, data)
-    print(content)
+    if args.debug:
+        print(content)
     run_tool(content)
