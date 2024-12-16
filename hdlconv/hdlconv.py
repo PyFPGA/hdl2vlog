@@ -151,7 +151,15 @@ def get_data(src, dst, args):
             data.setdefault('files', {}).append(file)
     return data
 
-def get_file(tempname, tempdata):
+def get_template(src, dst, args):
+    template = 'ghdl'
+    if src == 'slog':
+        template = 'slang-yosys'
+    if src == 'vhdl' and dst == 'vlog' and args.backend == 'yosys':
+        template = 'ghdl-yosys'
+    return template
+
+def get_content(tempname, tempdata):
     """Get script to run."""
     tempdir = Path(__file__).parent.joinpath('templates')
     jinja_file_loader = FileSystemLoader(str(tempdir))
@@ -176,13 +184,8 @@ def run_tool(content):
 def HDLconv(src, dst):
     args = get_args(src, dst)
     data = get_data(src, dst, args)
-    if src == 'slog':
-        template = 'slang-yosys'
-    elif src == 'vhdl' and dst == 'vlog':
-        template = args.backend
-    else:
-        template = 'ghdl'
-    content = get_file(template, data)
+    template = get_template(src, dst, args)
+    content = get_content(template, data)
     if args.debug:
         print(content)
     run_tool(content)
