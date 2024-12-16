@@ -119,23 +119,23 @@ def get_data(src, dst, args):
     data['hdl'] = 'raw-vhdl' if dst == 'vhdl' else 'verilog'
     data['top'] = args.top
     data['output'] = args.output
-    if 'arch' in args:
+    if 'arch' in args and args.arch:
         data['arch'] = args.arch
     if 'generic' in args and args.generic:
         for generic in args.generic:
             data.setdefault('generics', {})[generic[0]] = generic[1]
-    if 'param' in args:
+    if 'param' in args and args.param:
         for param in args.param:
             data.setdefault('params', {})[param[0]] = param[1]
-    if 'define' in args:
+    if 'define' in args and args.define:
         for define in args.define:
             data.setdefault('defines', {})[define[0]] = define[1]
-    if 'include' in args:
+    if 'include' in args and args.include:
         for include in args.include:
             include = Path(include).resolve()
             if not include.is_dir():
                 raise NotADirectoryError(include)
-            data.setdefault('includes', {}).append(include)
+            data.setdefault('includes', []).append(include)
     for file in args.files:
         if src == 'vhdl':
             aux = file.split(',')
@@ -145,10 +145,10 @@ def get_data(src, dst, args):
             lib = aux[1] if len(aux) > 1 else None
             data.setdefault('files', {})[file] = lib
         else:
-            file = Path(aux[0]).resolve()
+            file = Path(file).resolve()
             if not file.exists():
                 raise FileNotFoundError(file)
-            data.setdefault('files', {}).append(file)
+            data.setdefault('files', []).append(file)
     return data
 
 def get_template(src, dst, args):
@@ -178,6 +178,8 @@ def run_tool(content):
     command = f'bash {filename}'
     try:
         subprocess.run(command, shell=True, check=True, text=True)
+    except subprocess.CalledProcessError:
+        exit(1)
     finally:
         os.chdir(old_dir)
 

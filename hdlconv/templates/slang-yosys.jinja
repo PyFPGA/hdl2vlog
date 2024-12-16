@@ -14,7 +14,8 @@ $DOCKER yosys -Q -m slang -p '
 {% if includes %}verilog_defaults -add{% for path in includes %} -I{{ path }}{% endfor %}{% endif %}
 {% if defines %}verilog_defines{% for key, value in defines.items() %} -D{{ key }}={{ value }}{% endfor %}{% endif %}
 {%- for file in files %}
-read_slang {{ file }}
+{#read_slang {{ file }}#}
+read_verilog -sv -defer {{ file }}
 {%- endfor %}
 {% if params %}chparam{% for key, value in params.items() %} -set {{ key }} {{ value }}{% endfor %}{% endif %}
 hierarchy -top {{ top }}
