@@ -121,7 +121,7 @@ def get_data(src, dst, args):
     data['output'] = args.output
     if 'arch' in args:
         data['arch'] = args.arch
-    if 'generic' in args:
+    if 'generic' in args and args.generic:
         for generic in args.generic:
             data.setdefault('generics', {})[generic[0]] = generic[1]
     if 'param' in args:
