@@ -48,6 +48,14 @@ def get_args(src, dst):
         action='store_true',
         help='Enables debug mode'
     )
+    if src == 'slog':
+        parser.add_argument(
+            '--frontend',
+            metavar='TOOL',
+            default='slang',
+            choices=['slang', 'yosys'],
+            help='backend tool [slang]'
+        )
     if src == 'vhdl' and dst == 'vlog':
         parser.add_argument(
             '--backend',
@@ -154,9 +162,13 @@ def get_data(src, dst, args):
 def get_template(src, dst, args):
     template = 'ghdl'
     if src == 'slog':
-        template = 'slang-yosys'
-    if src == 'vhdl' and dst == 'vlog' and args.backend == 'yosys':
-        template = 'ghdl-yosys'
+        if args.frontend == 'slang':
+            template = 'slang-yosys'
+        else:
+            template = 'yosys'
+    if src == 'vhdl' and dst == 'vlog':
+        if args.backend == 'yosys':
+            template = 'ghdl-yosys'
     return template
 
 def get_content(tempname, tempdata):
