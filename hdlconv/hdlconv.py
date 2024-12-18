@@ -53,7 +53,7 @@ def get_args(src, dst):
             '--frontend',
             metavar='TOOL',
             default='slang',
-            choices=['slang', 'yosys'],
+            choices=['slang', 'synlig', 'yosys'],
             help='backend tool [slang]'
         )
     if src == 'vhdl' and dst == 'vlog':
@@ -165,7 +165,7 @@ def get_template(src, dst, args):
         if args.frontend == 'slang':
             template = 'slang-yosys'
         else:
-            template = 'yosys'
+            template = args.frontend
     if src == 'vhdl' and dst == 'vlog':
         if args.backend == 'yosys':
             template = 'ghdl-yosys'
