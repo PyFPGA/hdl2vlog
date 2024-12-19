@@ -11,6 +11,7 @@
 {% include 'docker.jinja' %}
 
 $DOCKER yosys -Q -m slang -p '
-read_slang {{ files | join(' ') }} {% if includes %}{% for path in includes %} -I{{ path }}{% endfor %}{% endif %}{% if defines %}{% for key, value in defines.items() %} -D {{ key }}={{ value }}{% endfor %}{% endif %}{% if params %}{% for key, value in params.items() %} -G {{ key }}={{ value }}{% endfor %}{% endif %} -top {{ top }}
+{#help read_slang#}
+read_slang {% if includes %}{% for path in includes %} -I{{ path }} -y {{ path }}{% endfor %}{% endif %}{% if defines %}{% for key, value in defines.items() %} -D{{ key }}={{ value }}{% endfor %}{% endif %}{% if params %}{% for key, value in params.items() %} -G{{ key }}={{ value }}{% endfor %}{% endif %} -top {{ top }} {{ files | join(' ') }}
 write_verilog -noattr {{ output }}
 '

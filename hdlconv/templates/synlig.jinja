@@ -11,7 +11,8 @@
 {% include 'docker.jinja' %}
 
 $DOCKER synlig -Q -p '
-read_systemverilog {% if includes %}{% for path in includes %} -I{{ path }}{% endfor %}{% endif %}{% if defines %}{% for key, value in defines.items() %} -D{{ key }}={{ value }}{% endfor %}{% endif %}{% if params %}{% for key, value in params.items() %} -P{{ key }}={{ value }}{% endfor %}{% endif %} {{ files | join(' ') }}
+{#help read_systemverilog#}
+read_systemverilog {% if includes %}{% for path in includes %} -I{{ path }} -y {{ path }}{% endfor %}{% endif %}{% if defines %}{% for key, value in defines.items() %} -D{{ key }}={{ value }}{% endfor %}{% endif %}{% if params %}{% for key, value in params.items() %} -P{{ key }}={{ value }}{% endfor %}{% endif %} {{ files | join(' ') }}
 hierarchy -top {{ top }}
 write_verilog -noattr {{ output }}
 '
